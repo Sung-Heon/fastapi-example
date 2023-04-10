@@ -41,3 +41,12 @@ def delete_user_item(db: Session, item_id: int):
     db.delete(db_item)
     db.commit()
     return db_item
+
+def update_item(db: Session, item_id: int, item: schemas.ItemUpdate):
+    db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
+    item_data = item.dict(exclude_unset=True)
+    for key, value in item_data.items():
+        setattr(db_item, key, value)
+    db.add(db_item)
+    db.commit()
+    return db_item

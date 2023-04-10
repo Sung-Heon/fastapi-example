@@ -54,6 +54,10 @@ def create_item_for_user(
     crud.delete_user_item(db=db, item_id=item_id)
     return Response(status_code=204)
 
+@app.put("/items/{item_id}", response_model=schemas.Item)
+async def update_item(item_id: int, item: schemas.ItemUpdate, db: Session = Depends(get_db)):
+    return crud.update_item(db=db, item_id=item_id, item=item)
+
 
 @app.get("/items/", response_model=list[schemas.Item])
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
