@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from sql_app import crud, models, schemas
@@ -47,10 +47,21 @@ def create_item_for_user(
 ):
     return crud.create_user_item(db=db, item=item, user_id=user_id)
 
+@app.delete("/items/{item_id}",status_code=status.HTTP_204_NO_CONTENT)
+def create_item_for_user(
+    item_id: int, db: Session = Depends(get_db)
+):
+    crud.delete_user_item(db=db, item_id=item_id)
+    return Response(status_code=204)
+
 
 @app.get("/items/", response_model=list[schemas.Item])
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     items = crud.get_items(db, skip=skip, limit=limit)
     return items
+
+
+
+
 if __name__ == '__main__':
     uvicorn.run('main:app', port=8000, reload=True)
