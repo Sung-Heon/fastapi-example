@@ -14,5 +14,9 @@ def read_item(item_id):
     return {"item_id": item_id}
 
 
+@app.get("/int-items/{item_id}")
+def read_item_int_only(item_id:int):
+    return {"int-item_id": item_id}
+
 if __name__ == '__main__':
     uvicorn.run('main:app', port=8000, reload=True)
